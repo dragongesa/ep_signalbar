@@ -5,6 +5,12 @@ Flutter widget to create signal bar, you can render signal-bar ui for your flutt
 ## Usage
 To use this plugin, add `ep_signalbar` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
 
+## Preview
+
+![Image of Signalbar][signal]
+
+[signal]: ./assets/signal.gif
+
 ### Example
 
 ``` dart
@@ -121,4 +127,5 @@ class _MyHomePageState extends State<MyHomePage> {
 ### Cheers
 
 A.M Hirin
-eduprog.net
+
+(eduprog.net)
