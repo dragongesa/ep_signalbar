@@ -3,7 +3,7 @@
 Flutter widget to create signal bar, you can render signal-bar ui for your flutter project with this widget.
 
 ## Usage
-To use this plugin, add `url_launcher` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
+To use this plugin, add `ep_signalbar` as a [dependency in your pubspec.yaml file](https://flutter.dev/platform-plugins/).
 
 ### Example
 
