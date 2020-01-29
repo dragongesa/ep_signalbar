@@ -9,7 +9,7 @@ To use this plugin, add `ep_signalbar` as a [dependency in your pubspec.yaml fil
 
 ![Image of Signalbar][signal]
 
-[signal]: ./assets/signal.gif
+[signal]: https://raw.githubusercontent.com/amhirin/ep_signalbar/master/assets/signal.gif
 
 ### Example
 
