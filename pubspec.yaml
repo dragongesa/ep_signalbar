@@ -1,6 +1,6 @@
 name: ep_signalbar
 description: Flutter widget to create signal bar, you can render signal-bar ui for your flutter project with this widget.
-version: 0.0.2
+version: 0.0.3
 homepage: http://nabita.info
 
 environment:
