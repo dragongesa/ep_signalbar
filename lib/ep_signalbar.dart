@@ -1,84 +1,101 @@
 library ep_signalbar;
 
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class EPSignalBar extends StatefulWidget {
-  Color  barOnlineColor;
-  Color  barOfflineColor;
-  Color  barBackgroundColor;
-  Color  barBorderColor;
-  int barCount = 0;
-  int initBarValue = 0;
-  double barHeight = 0;
-  double barWidth = 0;
-  Duration animationDuration;
-  Curve animationCurve;
+  final Color? barOnlineColor;
+  final Color? barOfflineColor;
+  final Color? barBackgroundColor;
+  final Color? barBorderColor;
+  final int barCount;
+  final int initBarValue;
+  final double barHeight;
+  final double barWidth;
+  final Duration animationDuration;
+  final Curve? animationCurve;
 
-  _EPSignalBarState state;
+  late final _EPSignalBarState state = _EPSignalBarState();
 
-  EPSignalBar({Key key,
-    this.barOnlineColor, this.barOfflineColor,
-    this.barBackgroundColor, this.barBorderColor,
-    this.barCount, this.barHeight,
-    this.barWidth, this.animationDuration,
-    this.animationCurve, this.initBarValue
-
-
-  }) : super(key: key);
+  EPSignalBar(
+      {Key? key,
+      this.barOnlineColor,
+      this.barOfflineColor,
+      this.barBackgroundColor,
+      this.barBorderColor,
+      this.barCount = 0,
+      this.barHeight = 0,
+      this.barWidth = 0,
+      this.animationDuration = kThemeAnimationDuration,
+      this.animationCurve,
+      this.initBarValue = 0})
+      : super(key: key);
 
   @override
-  _EPSignalBarState createState(){
-    return state = _EPSignalBarState();
+  _EPSignalBarState createState() {
+    return state;
   }
 }
-class _EPSignalBarState extends State<EPSignalBar> {
 
+class _EPSignalBarState extends State<EPSignalBar> {
+  late double barHeight = widget.barHeight;
+  late double barWidth = widget.barWidth;
+  late Color barOnlineColor =
+      widget.barOnlineColor ?? Color.fromRGBO(0, 140, 0, 1.0);
+  late Color barOfflineColor =
+      widget.barOfflineColor ?? Color.fromRGBO(125, 125, 125, 1.0);
+  late Color barBackgroundColor =
+      widget.barBackgroundColor ?? Colors.transparent;
+  late Color barBorderColor = widget.barBorderColor ?? Colors.transparent;
+  late int barCount = widget.barCount > 0 ? widget.barCount : 5;
+  late Duration animationDuration = widget.animationDuration;
   int _curBar = 0;
 
-  double _getBarHeight(int barIndex){
-    return _getHPercent(15 * (5 / widget.barCount)) + (barIndex * _getHPercent(10 * (5 / widget.barCount)));
+  double _getBarHeight(int barIndex) {
+    return _getHPercent(15 * (5 / widget.barCount)) +
+        (barIndex * _getHPercent(10 * (5 / widget.barCount)));
   }
 
-  double _getBarWidth(){
-    return ((widget.barWidth - 20) / widget.barCount) - _getWPercent(6 * (5 / widget.barCount));
+  double _getBarWidth() {
+    return ((barWidth - 20) / widget.barCount) -
+        _getWPercent(6 * (5 / widget.barCount));
   }
 
-  double _getBarCircular(){
-    return  _getBarWidth() * (22/100);
+  double _getBarCircular() {
+    return _getBarWidth() * (22 / 100);
   }
 
-  Widget buildBarWidget(){
+  Widget buildBarWidget() {
     List<AnimatedContainer> lstBar = [];
-    for (int i = 0; i < widget.barCount; i++){
+    for (int i = 0; i < widget.barCount; i++) {
       AnimatedContainer _a = AnimatedContainer(
           duration: widget.animationDuration,
-          curve: widget.animationCurve,
-          margin: (widget.barCount - i ) > 1 ? EdgeInsets.only(right: _getWPercent(4 * (5 / widget.barCount))) : EdgeInsets.only(right:0),
+          curve: widget.animationCurve ?? Curves.easeOut,
+          margin: (widget.barCount - i) > 1
+              ? EdgeInsets.only(right: _getWPercent(4 * (5 / widget.barCount)))
+              : EdgeInsets.only(right: 0),
           height: _getBarHeight(i),
           width: _getBarWidth(),
           decoration: BoxDecoration(
-            color:  (_curBar - 1)  < i ? widget.barOfflineColor : widget.barOnlineColor,
+            color: (_curBar - 1) < i
+                ? widget.barOfflineColor
+                : widget.barOnlineColor,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(_getBarCircular()),
-                topRight: Radius.circular(_getBarCircular())
-            ),
-          )
-      );
+                topRight: Radius.circular(_getBarCircular())),
+          ));
       lstBar.add(_a);
     }
     return Container(
       //alignment: Alignment.center,
       padding: EdgeInsets.all(10),
-      height: widget.barHeight,
-      width: widget.barWidth,
+      height: barHeight,
+      width: barWidth,
       decoration: BoxDecoration(
           color: widget.barBackgroundColor,
-          border: Border.all(width: 2, color: widget.barBorderColor),
-          borderRadius: BorderRadius.only(
-
-          )
-      ),
+          border: Border.all(
+              width: 2,
+              color: widget.barBorderColor ?? Theme.of(context).dividerColor),
+          borderRadius: BorderRadius.only()),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -86,13 +103,13 @@ class _EPSignalBarState extends State<EPSignalBar> {
       ),
     );
   }
-  @override
 
+  @override
   Widget build(BuildContext context) {
     return buildBarWidget();
   }
 
-  void setBarNumber(int no){
+  void setBarNumber(int no) {
     setState(() {
       if (no < 0) no = 0;
       if (no > widget.barCount) no = widget.barCount;
@@ -100,55 +117,41 @@ class _EPSignalBarState extends State<EPSignalBar> {
     });
   }
 
-  int getBarNumber(){
+  int getBarNumber() {
     return _curBar;
   }
 
-  void setWidgetHeight(double v){
+  void setWidgetHeight(double v) {
     if (v < 40) v = 40; //. min height
     setState(() {
-      widget.barHeight = v;
+      barHeight = v;
     });
   }
 
-  void setWidgetWidth(double v){
+  void setWidgetWidth(double v) {
     if (v < 40) v = 40; //. min width
     setState(() {
-      widget.barWidth = v;
+      barWidth = v;
     });
   }
 
-  double _getHPercent(double p){
-    return (p / 100) * widget.barHeight;
+  double _getHPercent(double p) {
+    return (p / 100) * barHeight;
   }
 
-  double _getWPercent(double p){
-    return (p / 100) * widget.barWidth;
+  double _getWPercent(double p) {
+    return (p / 100) * barWidth;
   }
 
   @override
   void initState() {
-    //. set default value if null
-    if (widget.barCount == null) widget.barCount = 0;
-    if (widget.barHeight == null) widget.barHeight = 0;
-    if (widget.barWidth == null) widget.barWidth = 0;
-    if (widget.initBarValue == null) widget.initBarValue = 0;
-    if (widget.animationCurve == null) widget.animationCurve = Curves.easeIn;
-    widget.barOnlineColor = widget.barOnlineColor ?? Color.fromRGBO(0, 140, 0, 1.0);
-    widget.barOfflineColor = widget.barOfflineColor ?? Color.fromRGBO(125, 125, 125, 1.0);
-    widget.barBackgroundColor = widget.barBackgroundColor ?? Colors.transparent;
-    widget.barBorderColor = widget.barBorderColor ?? Colors.transparent;
-    widget.barCount = widget.barCount > 0 ? widget.barCount : 5 ;
-    widget.animationDuration = widget.animationDuration ?? Duration(milliseconds: 300);
-    widget.barHeight = widget.barHeight >= 40 ? widget.barHeight : 100 ;
-    widget.barWidth = widget.barWidth >= 40 ? widget.barWidth : 130;
-    widget.animationCurve = widget.animationCurve  ;
-    if (widget.initBarValue >= 0 && widget.initBarValue <= widget.barCount){
+    barHeight = barHeight >= 40 ? barHeight : 100;
+    barWidth = barWidth >= 40 ? barWidth : 130;
+    if (widget.initBarValue >= 0 && widget.initBarValue <= widget.barCount) {
       _curBar = widget.initBarValue;
-    }else{
+    } else {
       _curBar = widget.barCount;
     }
-
 
     super.initState();
   }
