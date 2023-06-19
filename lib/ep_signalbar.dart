@@ -141,6 +141,13 @@ class _EPSignalBarState extends State<EPSignalBar> {
     });
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   double _getHPercent(double p) {
     return (p / 100) * barHeight;
   }
