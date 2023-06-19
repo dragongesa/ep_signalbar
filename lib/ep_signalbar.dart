@@ -110,10 +110,12 @@ class _EPSignalBarState extends State<EPSignalBar> {
   }
 
   void setBarNumber(int no) {
-    setState(() {
-      if (no < 0) no = 0;
-      if (no > widget.barCount) no = widget.barCount;
-      _curBar = no;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        if (no < 0) no = 0;
+        if (no > widget.barCount) no = widget.barCount;
+        _curBar = no;
+      });
     });
   }
 
@@ -123,15 +125,19 @@ class _EPSignalBarState extends State<EPSignalBar> {
 
   void setWidgetHeight(double v) {
     if (v < 40) v = 40; //. min height
-    setState(() {
-      barHeight = v;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        barHeight = v;
+      });
     });
   }
 
   void setWidgetWidth(double v) {
     if (v < 40) v = 40; //. min width
-    setState(() {
-      barWidth = v;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        barWidth = v;
+      });
     });
   }
 
